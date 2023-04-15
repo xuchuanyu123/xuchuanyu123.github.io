@@ -1,1 +1,215 @@
-<meta charset="utf-8" />    <meta      name="viewport"      content="initial-scale=1,maximum-scale=1,user-scalable=no"    />    <title>ArcGIS JavaScript API - WebGIS应用示例</title>    <link      rel="stylesheet"      href="https://js.arcgis.com/4.26/esri/themes/light/main.css"    />    <script src="https://js.arcgis.com/4.26/"></script>    <style>      html,      body,      #viewDiv {        padding: 0;        margin: 0;        height: 100%;        width: 100%;      }      #header {        height: 60px;        background-color: #EBEBEB;        text-align: center;        line-height: 60px;        font-size: 24px;      }      #basemapGallery {        bottom: 10px;        left: 10px;        z-index: 999;        background-color: white;        padding: 10px;        border-radius: 5px;        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);      }      #legend {        top: 10px;        right: 10px;        z-index: 999;        background-color: white;        padding: 10px;        border-radius: 5px;        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);      }      #search {        top: 70px;        right: 10px;        z-index: 999;        background-color: white;        padding: 10px;        border-radius: 5px;        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);      }      #layerList {        top: 130px;        right: 10px;        z-index: 999;        background-color: white;        padding: 10px;        border-radius: 5px;        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);      }      #tools {        top: 60px;        left: 10px;        z-index: 999;        background-color: white;        padding: 10px;        border-radius: 5px;        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);      }      .esri-widget--button {        margin-bottom: 5px;      }    </style>    <script>      require([        "esri/Map",        "esri/views/MapView",        "esri/widgets/BasemapGallery",        "esri/widgets/Legend",        "esri/widgets/Search",        "esri/widgets/LayerList",        "esri/widgets/DistanceMeasurement2D",        "esri/widgets/AreaMeasurement2D",        "esri/layers/FeatureLayer",        "esri/widgets/ScaleBar"      ], function (        Map,        MapView,        BasemapGallery,        Legend,        Search,        LayerList,        DistanceMeasurement2D,        AreaMeasurement2D,        FeatureLayer,        ScaleBar      ) {                //        const map = new Map({          basemap: "topo-vector"        });                // ------------------------------------------------------------------        // 设置视图        const view = new MapView({          container: "viewDiv",          map: map,          center: [119.28, 26.08],          zoom: 12        });        // ------------------------------------------------------------------        // 设置底图列表功能        const basemapGallery = new BasemapGallery({          view: view,          source: {            portal: {              url: "https://www.arcgis.com",              useVectorBasemaps: true // 使用矢量底图            }          }        });        view.ui.add(basemapGallery, { position: "top-right" });        // ------------------------------------------------------------------        // 设置搜索功能        const search = new Search({          view: view        });        view.ui.add(search, { position: "top-right" });        // ------------------------------------------------------------------        // 设置图层列表功能        const layerList = new LayerList({          view: view        });        view.ui.add(layerList, { position: "top-left" });        const featureLayer1 = new FeatureLayer({          url: "https://www.geosceneonline.cn/server/rest/services/Hosted/福州交通事故事件/FeatureServer",                    outFields: ["*"],          popupTemplate: {            title: "{TRL_NAME}",            content: [              {                type: "fields",                fieldInfos: [                  {                    fieldName: "PARK_NAME",                    label: "Park Name"                  },                  {                    fieldName: "TRL_NAME",                    label: "Trail Name"                  },                  {                    fieldName: "ELEV_FT",                    label: "Elevation"                  },                  {                    fieldName: "DIFFICULTY",                    label: "Difficulty"                  }                ]              }            ]          }        });        map.add(featureLayer1);        // ------------------------------------------------------------------        // 设置图例        const legend = new Legend({          view: view,          layerInfos: [            {              layer: featureLayer1,              title: "事件类型"            }          ]        });        view.ui.add(legend, { position: "bottom-right" });                // ------------------------------------------------------------------        // 设置比例尺        let scaleBar = new ScaleBar({          view: view,          style: "ruler",          unit : "metric"        });        view.ui.add(scaleBar, {          position: "bottom-left"        });      });    </script>  </head>  <body>    <div id="header">WebGIS应用示例</div>    <div id="viewDiv"></div>    <div id="basemapGallery"></div>    <div id="legend"></div>    <div id="search"></div>    <div id="layerList"></div>    <div id="tools"></div>  </body></html>
+<meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>ArcGIS JavaScript API - WebGIS应用示例</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.26/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #header {
+        height: 60px;
+        background-color: #EBEBEB;
+        text-align: center;
+        line-height: 60px;
+        font-size: 24px;
+      }
+
+      #basemapGallery {
+        bottom: 10px;
+        left: 10px;
+        z-index: 999;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #legend {
+        top: 10px;
+        right: 10px;
+        z-index: 999;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #search {
+        top: 70px;
+        right: 10px;
+        z-index: 999;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #layerList {
+        top: 130px;
+        right: 10px;
+        z-index: 999;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #tools {
+        top: 60px;
+        left: 10px;
+        z-index: 999;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .esri-widget--button {
+        margin-bottom: 5px;
+      }
+    </style>
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/Legend",
+        "esri/widgets/Search",
+        "esri/widgets/LayerList",
+        "esri/widgets/DistanceMeasurement2D",
+        "esri/widgets/AreaMeasurement2D",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/ScaleBar"
+      ], function (
+        Map,
+        MapView,
+        BasemapGallery,
+        Legend,
+        Search,
+        LayerList,
+        DistanceMeasurement2D,
+        AreaMeasurement2D,
+        FeatureLayer,
+        ScaleBar
+      ) {
+        
+        //
+        const map = new Map({
+          basemap: "topo-vector"
+        });
+        
+        // ------------------------------------------------------------------
+        // 设置视图
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [119.28, 26.08],
+          zoom: 12
+        });
+        // ------------------------------------------------------------------
+        // 设置底图列表功能
+        const basemapGallery = new BasemapGallery({
+          view: view,
+          source: {
+            portal: {
+              url: "https://www.arcgis.com",
+              useVectorBasemaps: true // 使用矢量底图
+            }
+          }
+        });
+        view.ui.add(basemapGallery, { position: "top-right" });
+
+        // ------------------------------------------------------------------
+        // 设置搜索功能
+        const search = new Search({
+          view: view
+        });
+        view.ui.add(search, { position: "top-right" });
+
+        // ------------------------------------------------------------------
+        // 设置图层列表功能
+        const layerList = new LayerList({
+          view: view
+        });
+        view.ui.add(layerList, { position: "top-left" });
+        const featureLayer1 = new FeatureLayer({
+          url: "https://www.geosceneonline.cn/server/rest/services/Hosted/福州交通事故事件/FeatureServer",
+          
+          outFields: ["*"],
+          popupTemplate: {
+            title: "{TRL_NAME}",
+            content: [
+              {
+                type: "fields",
+                fieldInfos: [
+                  {
+                    fieldName: "PARK_NAME",
+                    label: "Park Name"
+                  },
+                  {
+                    fieldName: "TRL_NAME",
+                    label: "Trail Name"
+                  },
+                  {
+                    fieldName: "ELEV_FT",
+                    label: "Elevation"
+                  },
+                  {
+                    fieldName: "DIFFICULTY",
+                    label: "Difficulty"
+                  }
+                ]
+              }
+            ]
+          }
+        });
+        map.add(featureLayer1);
+        // ------------------------------------------------------------------
+        // 设置图例
+        const legend = new Legend({
+          view: view,
+          layerInfos: [
+            {
+              layer: featureLayer1,
+              title: "事件类型"
+            }
+          ]
+        });
+        view.ui.add(legend, { position: "bottom-right" });
+        
+        // ------------------------------------------------------------------
+        // 设置比例尺
+        let scaleBar = new ScaleBar({
+          view: view,
+          style: "ruler",
+          unit : "metric"
+        });
+        view.ui.add(scaleBar, {
+          position: "bottom-left"
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="header">福州市交通事故事件</div>
+    <div id="viewDiv"></div>
+    <div id="basemapGallery"></div>
+    <div id="legend"></div>
+    <div id="search"></div>
+    <div id="layerList"></div>
+    <div id="tools"></div>
+  </body>
+</html>
